@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>indexDB</title>
+</head>
+<body>
+    <ul>
+        <li>wq</li>
+    </ul>
+    <ol>
+        <li>wq</li>
+    </ol>
+<script>
+    var openRequest = indexedDB.open('db', 2);
+    var db;
+
+    openRequest.onupgradeneeded = function (e) {
+        console.log('Upgrading...');
+        db = e.target.result
+        if (!db.objectStoreNames.contains('person')) {
+            let objectStore = db.createObjectStore('person', { keyPath: 'id' });
+            objectStore.createIndex('name', 'name', { unique: false });
+            objectStore.createIndex('email', 'email', { unique: true });
+        }
+    }
+
+    openRequest.onsuccess = function (e) {
+        db = openRequest.result;
+        console.log('db', db)
+        add(db)
+    }
+   
+
+    function add(db) {
+        var request = db.transaction(['person'], 'readwrite')
+            .objectStore('person').add({ id: 1, name: '张三', age: 24, email: 'zhangsan@example.com' });
+        request.onsuccess = function (event) {
+            console.log('数据写入成功');
+        };
+
+        request.onerror = function (event) {
+            console.log('数据写入失败');
+        }
+    }
+    
+</script>
+</body>
+</html>
