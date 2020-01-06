@@ -3,11 +3,12 @@
  * @Author: ganbowen
  * @Date: 2020-01-05 16:59:37
  * @LastEditors  : ganbowen
- * @LastEditTime : 2020-01-05 20:21:25
+ * @LastEditTime : 2020-01-06 15:31:20
  */
 const PENDING = 'pending'
 const FULFILLED = 'fulfilled'
 const REJECTED = 'rejected'
+
 
 function Promise1(executor) {
     let _this = this
@@ -17,10 +18,8 @@ function Promise1(executor) {
     _this.value = undefined; // fulfilled状态时 返回的信息
     _this.reason = undefined; // rejected状态时 拒绝的原因
     function resolve(value) {
-        console.log('resolve1-----------------', value)
         if (value instanceof Promise1) return value.then(resolve, reject)
         setTimeout(() => {
-            console.log('resolve2-----------------', value)
             if (_this.status === PENDING) {
                 _this.status = FULFILLED
                 _this.value = value
@@ -30,10 +29,7 @@ function Promise1(executor) {
     }
 
     function reject(reason) {
-        console.log('reject1-----------------', reason)
         setTimeout(() => {
-            console.log('reject2-----------------', reason)
-            console.log('_this.onRejectArr', _this.onRejectArr)
             if (_this.status === PENDING) {
                 _this.status = REJECTED
                 _this.reason = reason
@@ -49,18 +45,28 @@ function Promise1(executor) {
     }
 }
 
-Promise1.all = function () {
-
-}
-
-Promise1.race = function () {
-
-}
-
 function resolvePromise(promise2, x, resolve, reject) {
     if (promise2 === x) return reject(new TypeError('循环引用'))
+    /**
+     *  // 循环引用
+        let promise = new Promise1((resolve,reject) => {
+            resolve(true)
+        }).then(value => {
+            return promise
+        })
+     */
     let called = false; // 避免多次调用
     if (x instanceof Promise1) {
+        /**
+         *  // 返回Promise1 x
+            let promise = new Promise1((resolve,reject) => {
+                resolve(true)
+            }).then(value => {
+                return new Promise1((resolve,reject) => {
+                    resolve(true)
+                })
+            })
+        */
         if (x.status === PENDING) {
             try {
                 x.then(y => {
@@ -72,6 +78,11 @@ function resolvePromise(promise2, x, resolve, reject) {
                 reject(e)
             }
         } else { // 同一个promise连续调用then
+            /**
+             *  // 已经触发的Promise
+
+
+             */
             x.then(resolve, reject)
         }
     } else if (x != null && (((typeof x === 'object') || (typeof x === 'function')))) {
@@ -91,12 +102,11 @@ function resolvePromise(promise2, x, resolve, reject) {
                 resolve(x)
             }
         } catch (e) {
-            if(called) return;
+            if (called) return;
             called = true;
             reject(e)
         }
     } else {
-        console.log('12313', x,resolve)
         resolve(x)
     }
 
@@ -107,7 +117,6 @@ Promise1.prototype.then = function (onResolve, onReject) {
     let promise2
     onResolve = typeof onResolve === 'function' ? onResolve : value => value
     onReject = typeof onReject === 'function' ? onReject : reason => { throw reason }
-
     /*
         以下的setTimeout的使用是因为 then/catch 可以在同一个promise对象中连续使用
         要保证上一个then已经执行完成
@@ -168,6 +177,36 @@ Promise1.prototype.catch = function (onReject) {
     return this.then(null, onReject);
 }
 
+function gen(len, resolve) {
+    let count = 0
+    let values = []
+    return function (i, value) {
+        values[i] = value
+        if (++count === len) {
+            resolve(values)
+        }
+    }
+}
+
+Promise1.all = function (promises) {
+    return new Promise1((resolve, reject) => {
+        let done = gen(promises.length, resolve)
+        promises.forEach((promise, index) => {
+            promise.then(value => {
+                done(value, index)
+            }, reject)
+        })
+    })
+}
+
+Promise1.race = function () {
+    return new Promise1((resolve, reject) => {
+        promises.forEach((promise) => {
+            promise.then(resolve, reject)
+        })
+    })
+}
+
 Promise1.resolve = function (value) {
     return new Promise1(resolve => {
         resolve(value)
@@ -181,19 +220,22 @@ Promise1.reject = function (value) {
 }
 
 
-function executor(resolve, reject) {
-    let value = Math.random() * 10
+// let demo = new Promise1((resolve, reject) => {
+    // let value = Math.random() * 10
     // if (value > 5) {
-        resolve(value)
+    // resolve(value)
     // } else {
     //     reject(value)
     // }
-}
-//将Promise改成我们自己的Bromsie
-let demo = new Promise1(executor)
+// })
 
 function onResolve(value) {
     console.log('onResolve+++++', value)
+    return new Promise1((resolve, reject) => {
+        resolve(123)
+    }).then(val => {
+        console.log(val)
+    })
 }
 
 function onReject(value) {
@@ -203,11 +245,27 @@ function onReject(value) {
     // })
 }
 
-demo.then(onResolve).then(() => {
-    console.log(11111)
-})
+// demo.then(onResolve).catch(() => {
+//     console.log(11111)
+// })
 // .then(e => {
 //     console.log('erceng1111', e)
 // }).catch(e => {
 //     console.log('erceng', e)
 // })
+
+let promise = new Promise1((resolve,reject) => {
+    resolve(true)
+}).then(value => {
+    return promise.then(val => {
+        console.log('1233213')
+    })
+})
+
+/**
+ *
+ * promise的then中方法先保存到一个回调函数队列中
+ * 当promise对象实例化时，触发内部 resolve 或者 reject 方法
+ * 在resolve中执行回调函数队列中的then中的回调函数
+ *
+ * */
