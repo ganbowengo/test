@@ -3,7 +3,7 @@
  * @Author: ganbowen
  * @Date: 2020-01-06 15:48:37
  * @LastEditors  : ganbowen
- * @LastEditTime : 2020-01-06 16:40:25
+ * @LastEditTime : 2020-01-06 17:37:03
  */
 
 
@@ -15,15 +15,7 @@
  *     李四和王五是水果售卖商，同时在张三处批发香蕉 - 订阅者（将自己的电话留在发布者处，实现注册）
  */
 
-function toArray(list, start) {
-    start = start || 0;
-    let i = list.length - start;
-    let ret = new Array(i);
-    while (i--) {
-        ret[i] = list[i + start];
-    }
-    return ret
-}
+const { toArray } = require('../utils')
 
 let Ob = function () {
     return {
@@ -91,5 +83,5 @@ Person2.on('Person2', function (e) {
     console.log('Person2', e)
 })
 
-Person1.emit('Person1','我可以送西瓜')
-Person2.emit('Person2','我可以送苹果')
+Person1.emit('Person1', '我可以送西瓜')
+Person2.emit('Person2', '我可以送苹果')
