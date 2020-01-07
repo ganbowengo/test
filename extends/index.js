@@ -1,9 +1,9 @@
 /*
- * @Descripttion: 
+ * @Descripttion: js 寄生组合继承
  * @Author: ganbowen
  * @Date: 2020-01-07 10:43:25
  * @LastEditors  : ganbowen
- * @LastEditTime : 2020-01-07 14:47:54
+ * @LastEditTime : 2020-01-07 15:28:19
  */
 function Parent(name) {
     this.name = name
