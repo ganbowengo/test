@@ -3,7 +3,7 @@
  * @Author: ganbowen
  * @Date: 2020-01-06 15:48:37
  * @LastEditors  : ganbowen
- * @LastEditTime : 2020-01-06 17:37:03
+ * @LastEditTime : 2020-01-06 22:04:21
  */
 
 
@@ -85,3 +85,4 @@ Person2.on('Person2', function (e) {
 
 Person1.emit('Person1', '我可以送西瓜')
 Person2.emit('Person2', '我可以送苹果')
+
