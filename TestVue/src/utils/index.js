@@ -3,7 +3,7 @@
  * @Author: ganbowen
  * @Date: 2020-01-06 17:33:19
  * @LastEditors  : ganbowen
- * @LastEditTime : 2020-01-08 15:41:48
+ * @LastEditTime : 2020-01-08 20:31:14
  */
 function toArray(list, start) {
     start = start || 0;
@@ -26,13 +26,18 @@ function def(obj, key, val, enumerable) {
 
 function noop (a, b, c) {}
 
-function isObject(obj){
+function isPlainObject(obj){
     return Object.prototype.toString.call(obj) === '[object Object]'
+}
+
+function isObject(obj){
+    return obj !== null && typeof obj === 'object'
 }
 
 module.exports = {
     toArray,
     def,
     noop,
+    isPlainObject,
     isObject
 }

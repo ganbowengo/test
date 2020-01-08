@@ -3,7 +3,7 @@
  * @Author: ganbowen
  * @Date: 2020-01-07 19:24:03
  * @LastEditors  : ganbowen
- * @LastEditTime : 2020-01-08 16:18:36
+ * @LastEditTime : 2020-01-08 20:28:59
  */
 
 const targetStack = []
@@ -35,7 +35,6 @@ Dep.prototype.notify = function () {
     this.subs.forEach(item => item.update())
 }
 
-
 function remove(arr, sub) {
     if (arr.length) {
         let index = arr.indexOf(sub)
@@ -53,7 +52,6 @@ function pushTarget(target) {
 function popTarget() {
     targetStack.pop()
     Dep.target = targetStack[targetStack.length - 1]
-
 }
 
 module.exports = {

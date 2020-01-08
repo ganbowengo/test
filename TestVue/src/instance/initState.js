@@ -3,9 +3,9 @@
  * @Author: ganbowen
  * @Date: 2020-01-08 15:51:44
  * @LastEditors  : ganbowen
- * @LastEditTime : 2020-01-08 20:03:26
+ * @LastEditTime : 2020-01-08 20:31:01
  */
-const { isObject, noop } = require('../utils')
+const { isPlainObject, noop } = require('../utils')
 const { observer } = require('../Observer')
 const { pushTarget, popTarget } = require('../Observer/Dep')
 
@@ -69,7 +69,7 @@ function initWatch(vm, watch) {
 }
 
 function createWatcher(vm, expOrFn, handler, options) {
-    if (isObject(handler)) {
+    if (isPlainObject(handler)) {
         options = handler
         handler = handler.handler
     }

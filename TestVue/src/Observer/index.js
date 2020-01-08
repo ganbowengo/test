@@ -3,10 +3,10 @@
  * @Author: ganbowen
  * @Date: 2020-01-07 16:15:14
  * @LastEditors  : ganbowen
- * @LastEditTime : 2020-01-08 19:47:45
+ * @LastEditTime : 2020-01-08 21:38:21
  */
 
-const { def } = require('../utils')
+const { def, isObject } = require('../utils')
 const { Dep } = require('./Dep')
 
 // 将数据处理为setter getter形式
@@ -23,11 +23,14 @@ function Observer(data) {
 }
 
 function observer(obj) {
+    if (!isObject(obj)) return
+    let ob = null
     if (obj.__ob__) {
-        obj = obj.__ob__
+        ob = obj.__ob__
     } else {
-        new Observer(obj)
+        ob = new Observer(obj)
     }
+    return ob
 }
 
 function defineReactive(obj, key, val) {
@@ -38,13 +41,20 @@ function defineReactive(obj, key, val) {
     if ((!getter || setter) && arguments.length === 2) {
         val = obj[key]
     }
+    let childOb = observer(val)
     Object.defineProperty(obj, key, {
         enumerable: true,
         configurable: true,
         get: function reactiveGetter() {
+            const value = getter ? getter.call(obj) : val
             /* 将Dep.target（即当前的Watcher对象存入dep的subs中） */
-            dep.addSub(Dep.target);
-            return val;
+            if(Dep.target){
+                dep.depend()
+                if(childOb){
+                    childOb.dep.depend()
+                }
+            }
+            return value;
         },
         set: function reactiveSetter(newVal) {
             const value = getter ? getter.call(obj) : val
@@ -55,7 +65,7 @@ function defineReactive(obj, key, val) {
             } else {
                 val = newVal
             }
-            observer(obj)
+            childOb = observer(newVal)
             /* 在set的时候触发dep的notify来通知所有的Watcher对象更新视图 */
             dep.notify();
         }
