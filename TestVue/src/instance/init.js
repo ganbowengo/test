@@ -3,21 +3,21 @@
  * @Author: ganbowen
  * @Date: 2020-01-08 14:54:45
  * @LastEditors  : ganbowen
- * @LastEditTime : 2020-01-08 17:52:36
+ * @LastEditTime : 2020-01-09 16:18:38
  */
 const { initState } = require('./initState')
+const { callHook } = require('./lifecycle')
+const { mergeOptions } = require('../utils/options')
 const { Watcher } = require('../Observer/Watcher')
 const { noop } = require('../utils')
 
 function initMixins(TestVue) {
     TestVue.prototype._init = function (options) {
         const vm = this
-        vm.$options = options
+        vm.$options = mergeOptions(options)
         initState(vm)
         new Watcher(vm, vm.$options.render, noop)
-        setTimeout(() => {
-            this.info.name = '小草'
-        }, 1000)
+        callHook(vm, 'mounted');
     }
 }
 

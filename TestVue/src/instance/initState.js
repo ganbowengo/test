@@ -3,10 +3,10 @@
  * @Author: ganbowen
  * @Date: 2020-01-08 15:51:44
  * @LastEditors  : ganbowen
- * @LastEditTime : 2020-01-08 20:31:01
+ * @LastEditTime : 2020-01-09 10:47:31
  */
 const { isPlainObject, noop } = require('../utils')
-const { observer } = require('../Observer')
+const { observe } = require('../Observer')
 const { pushTarget, popTarget } = require('../Observer/Dep')
 
 const sharedPropertyDefinition = {
@@ -45,7 +45,7 @@ function initData(vm) {
     while (i--) {
         proxy(vm, '_data', keys[i])
     }
-    observer(data)
+    observe(data)
 }
 
 function getData(data, vm) {

@@ -3,18 +3,18 @@
  * @Author: ganbowen
  * @Date: 2020-01-07 19:29:05
  * @LastEditors  : ganbowen
- * @LastEditTime : 2020-01-08 20:14:53
+ * @LastEditTime : 2020-01-09 11:28:14
  */
 
-const { Dep } = require('./Dep')
 const bailRE = /[^\w.$]/
-
+const { pushTarget, popTarget } = require('./Dep')
 let uuid = 0
 function Watcher(vm, expOrFn, cb) {
     this.vm = vm
     this.cb = cb
     this.id = ++uuid
     this.deps = []
+    this.newDeps = []
     this.newDepIds = new Set()
     if (typeof expOrFn === 'function') {
         this.getter = expOrFn
@@ -25,9 +25,16 @@ function Watcher(vm, expOrFn, cb) {
 }
 
 Watcher.prototype.get = function () {
-    Dep.target = this
-    let value = this.getter.call(this.vm, this.vm)
-    Dep.target = undefined
+    let value
+    pushTarget(this)
+    try {
+        value = this.getter.call(this.vm, this.vm)
+    } catch (e) {
+        throw Error()
+    } finally {
+        popTarget()
+        // this.cleanupDeps()
+    }
     return value
 }
 
@@ -45,6 +52,24 @@ Watcher.prototype.update = function () {
     const oldValue = this.value
     this.value = this.get()
     this.cb.call(this.vm, this.value, oldValue)
+}
+
+Watcher.prototype.cleanupDeps = function () {
+    let i = this.deps.length
+    while (i--) {
+        const dep = this.deps[i]
+        if (!this.newDepIds.has(dep.id)) {
+            dep.removeSub(this)
+        }
+    }
+    let tmp = this.depIds
+    this.depIds = this.newDepIds
+    this.newDepIds = tmp
+    this.newDepIds.clear()
+    tmp = this.deps
+    this.deps = this.newDeps
+    this.newDeps = tmp
+    this.newDeps.length = 0
 }
 
 Watcher.prototype.teardown = function () {

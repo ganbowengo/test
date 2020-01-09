@@ -3,7 +3,7 @@
  * @Author: ganbowen
  * @Date: 2020-01-08 09:57:06
  * @LastEditors  : ganbowen
- * @LastEditTime : 2020-01-08 21:20:43
+ * @LastEditTime : 2020-01-09 14:44:28
  */
 
 const { Watcher } = require('./Observer/Watcher')
@@ -22,5 +22,39 @@ TestVue.prototype.$watch = function (expOrFn, cb, options) {
         watcher.teardown()
     }
 }
-
+new TestVue({
+    // template render
+    render: function () {
+        console.log('this.data', this.info.name)
+        console.log('this.class', this.class)
+    },
+    mounted() {
+        console.log('this', this.class)
+        setTimeout(() => {
+            console.log('this.data', 12345678)
+            this.class.push('xiaocao')
+        }, 2000)
+    },
+    data: function () {
+        return {
+            name: '小明',
+            info: {
+                name: '小花',
+                skill: {
+                    play: 'basketball',
+                    sin: 'The Girls'
+                }
+            },
+            class: ['小明', '小张']
+        }
+    },
+    watch: {
+        'info.name': function (val) {
+            console.log('val', val)
+        },
+        'class': function (val) {
+            console.log('class', val)
+        }
+    }
+})
 module.exports = TestVue
