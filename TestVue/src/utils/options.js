@@ -3,9 +3,11 @@
  * @Author: ganbowen
  * @Date: 2020-01-09 15:21:39
  * @LastEditors  : ganbowen
- * @LastEditTime : 2020-01-09 16:20:56
+ * @LastEditTime : 2020-01-09 16:23:43
  */
 const LIFE_CYCLE = [
+    'create',
+    'beforeCreate',
     'mounted'
 ]
 

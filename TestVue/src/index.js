@@ -3,7 +3,7 @@
  * @Author: ganbowen
  * @Date: 2020-01-08 09:57:06
  * @LastEditors  : ganbowen
- * @LastEditTime : 2020-01-09 14:44:28
+ * @LastEditTime : 2020-01-09 16:24:15
  */
 
 const { Watcher } = require('./Observer/Watcher')
@@ -27,6 +27,12 @@ new TestVue({
     render: function () {
         console.log('this.data', this.info.name)
         console.log('this.class', this.class)
+    },
+    beforeCreate() {
+        console.log('beforeCreate')
+    },
+    create() {
+        console.log('create')
     },
     mounted() {
         console.log('this', this.class)
