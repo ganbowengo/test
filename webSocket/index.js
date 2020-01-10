@@ -3,7 +3,7 @@
  * @Author: ganbowen
  * @Date: 2020-01-10 16:23:02
  * @LastEditors  : ganbowen
- * @LastEditTime : 2020-01-10 17:37:00
+ * @LastEditTime : 2020-01-10 19:34:02
  */
 function WebSocketClass(url, callback, name = 'default', type = 'heart') {
     this.url = url
@@ -82,9 +82,3 @@ WebSocketClass.prototype.close = function () {
     this.status = 'close'
     return this.ws.close()
 }
-
-function someFn(data) {
-    console.log('接收服务器消息的回调：', data);
-}
-const wsValue = new WebSocketClass('ws://localhost:7980', someFn, 'wsName');
-wsValue.connect('立即与服务器通信');

@@ -1,0 +1,34 @@
+<!--
+ * @Descripttion: websocket html
+ * @Author: ganbowen
+ * @Date: 2019-12-05 10:15:00
+ * @LastEditors  : ganbowen
+ * @LastEditTime : 2020-01-10 19:33:53
+ -->
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title></title>
+</head>
+
+<body>
+    <h1></h1>
+    <br>
+    <input type="text" id="sendtext"><button onclick="send()">send</button>
+    <script src="./index.js"></script>
+    <script>
+        function someFn(data) {
+            console.log('接收服务器消息的回调：', data);
+        }
+        const wsValue = new WebSocketClass('ws://localhost:7980', someFn, 'wsName');
+        wsValue.connect('立即与服务器通信');
+
+        function send(){
+            let value = document.getElementById('sendtext').getAttribute('value')
+            wsValue.send(value)
+        }
+    </script>
+</body>
+
+</html>
