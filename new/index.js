@@ -3,7 +3,7 @@
  * @Author: ganbowen
  * @Date: 2020-01-07 15:27:58
  * @LastEditors  : ganbowen
- * @LastEditTime : 2020-01-07 16:08:14
+ * @LastEditTime : 2020-01-10 16:10:58
  */
 
 
@@ -79,7 +79,7 @@ let soldierPro = {
     /**
      * new 的四件事：
      * 1. 创建临时对象 this
-     * 2. 绑定原型
+     * 2. 绑定原型__proto__
      * 3. return 临时对象
      * 4. 原型命名为prototype
      */

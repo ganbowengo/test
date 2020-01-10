@@ -3,7 +3,7 @@
  * @Author: ganbowen
  * @Date: 2020-01-07 10:43:25
  * @LastEditors  : ganbowen
- * @LastEditTime : 2020-01-07 15:28:19
+ * @LastEditTime : 2020-01-10 16:09:49
  */
 function Parent(name) {
     this.name = name
