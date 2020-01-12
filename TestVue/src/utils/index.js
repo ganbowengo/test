@@ -3,7 +3,7 @@
  * @Author: ganbowen
  * @Date: 2020-01-06 17:33:19
  * @LastEditors  : ganbowen
- * @LastEditTime : 2020-01-08 20:31:14
+ * @LastEditTime : 2020-01-12 16:39:09
  */
 function toArray(list, start) {
     start = start || 0;
@@ -24,14 +24,25 @@ function def(obj, key, val, enumerable) {
     })
 }
 
-function noop (a, b, c) {}
+function noop(a, b, c) { }
 
-function isPlainObject(obj){
+function isPlainObject(obj) {
     return Object.prototype.toString.call(obj) === '[object Object]'
 }
 
-function isObject(obj){
+function isObject(obj) {
     return obj !== null && typeof obj === 'object'
+}
+
+function makeMap(str, expectsLowerCase) {
+    const map = Object.create(null)
+    const list = str.split(',')
+    for (let i = 0; i < list.length; i++) {
+        map[list[i]] = true
+    }
+    return expectsLowerCase
+        ? val => map[val.toLowerCase()]
+        : val => map[val]
 }
 
 module.exports = {
@@ -39,5 +50,6 @@ module.exports = {
     def,
     noop,
     isPlainObject,
-    isObject
+    isObject,
+    makeMap
 }
