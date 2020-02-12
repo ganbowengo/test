@@ -3,9 +3,12 @@
  * @Author: ganbowen
  * @Date: 2020-02-04 09:35:43
  * @LastEditors  : ganbowen
- * @LastEditTime : 2020-02-04 09:45:03
+ * @LastEditTime : 2020-02-04 16:44:48
  */
-const { resolve } = require('../allPublic/utils')
+const path = require('path');
+function resolve(dir) {
+    return path.join(__dirname, dir)
+}
 const port = 8000 // dev port
 module.exports = {
     outputDir: 'dist',

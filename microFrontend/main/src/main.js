@@ -3,7 +3,7 @@
  * @Author: ganbowen
  * @Date: 2020-02-04 09:32:49
  * @LastEditors  : ganbowen
- * @LastEditTime : 2020-02-04 15:27:07
+ * @LastEditTime : 2020-02-04 15:36:55
  */
 import Vue from 'vue'
 import App from './App.vue'
@@ -54,7 +54,7 @@ initApp();
 
 registerMicroApps(
     [
-        { name: 'vue app', entry: '//localhost:8001', render, activeRule: genActiveRule('/vue') },
+        { name: 'vue1 app', entry: '//localhost:8001', render, activeRule: genActiveRule('/vue1') },
         { name: 'vue2 app', entry: '//localhost:8002', render, activeRule: genActiveRule('/vue2') },
     ],
     {
@@ -76,7 +76,7 @@ registerMicroApps(
     }
 );
 
-setDefaultMountApp('/vue2');
+setDefaultMountApp('/vue1');
 
 start({ prefetch: true });
 

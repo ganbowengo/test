@@ -3,7 +3,7 @@
  * @Author: ganbowen
  * @Date: 2020-02-04 14:35:19
  * @LastEditors  : ganbowen
- * @LastEditTime : 2020-02-04 14:40:03
+ * @LastEditTime : 2020-02-04 16:44:19
  */
 const path = require('path');
 const { name } = require('./package');
