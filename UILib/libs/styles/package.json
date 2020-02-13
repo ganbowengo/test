@@ -1,0 +1,17 @@
+{
+  "name": "g-ui-styles",
+  "version": "1.0.0",
+  "description": "g-ui-styles",
+  "main": "index.js",
+  "author": "ganbowen",
+  "license": "MIT",
+  "scripts": {
+    "build": "gulp build"
+  },
+  "dependencies": {
+    "gulp": "^4.0.2",
+    "gulp-autoprefixer": "^7.0.1",
+    "gulp-cssmin": "^0.2.0",
+    "gulp-sass": "^4.0.2"
+  }
+}

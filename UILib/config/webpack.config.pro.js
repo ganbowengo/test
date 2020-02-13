@@ -3,10 +3,12 @@
  * @Author: ganbowen
  * @Date: 2020-02-12 15:58:25
  * @LastEditors  : ganbowen
- * @LastEditTime : 2020-02-12 17:28:05
+ * @LastEditTime : 2020-02-13 18:21:30
  */
 'use strict'
+const path = require('path')
 const entrys = require('./entrys')
+const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 const { VueLoaderPlugin } = require('vue-loader') // 处理.vue文件
 const ProgressBarPlugin = require('progress-bar-webpack-plugin')
 
@@ -15,10 +17,11 @@ function resolve(url) {
 }
 
 module.exports = {
+    mode : 'production',
     entry: entrys,
     output: {
         path: resolve('dist'),
-        filename: '[name]/index.js',
+        filename: '[name].js',
         library: 'G-UI',
         libraryTarget: 'commonjs2',
     },
@@ -40,35 +43,12 @@ module.exports = {
                 test: /\.vue$/,
                 include: [resolve('libs')],
                 loader: 'vue-loader'
-            },
-            {
-                test: /\.scss$/,
-                exclude: [/node_modules/],
-                use: [
-                    'style-loader',
-                    'css-loader',
-                    'sass-loader'
-                ]
-            },
-            {
-                test: /\.css$/,
-                loaders: ['style-loader', 'css-loader']
-            },
-            {
-                test: /\.(woff|svg|eot|ttf)\??.*$/,
-                use: {
-                    loader: 'url-loader',
-                    options: {
-                        name: '[name]-[hash:5].min.[ext]',
-                        limit: 5000,
-                        outputPath: 'static/css/fonts'
-                    }
-                }
             }
         ]
     },
     plugins: [
         new ProgressBarPlugin(),
+        new CleanWebpackPlugin(),
         new VueLoaderPlugin()
     ]
 }
