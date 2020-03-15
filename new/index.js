@@ -2,8 +2,8 @@
  * @Descripttion: 
  * @Author: ganbowen
  * @Date: 2020-01-07 15:27:58
- * @LastEditors  : ganbowen
- * @LastEditTime : 2020-01-10 16:10:58
+ * @LastEditors: ganbowen
+ * @LastEditTime: 2020-03-12 15:50:35
  */
 
 
@@ -89,8 +89,13 @@ let soldierPro = {
     function soldier(id) {
         this.id = id
     }
+    soldier.prototype.life = 45
+    soldier.prototype.fire = function () { }
+    soldier.prototype.walk = function () { }
+    soldier.prototype.run = function () { }
+
     let soldiers = []
     for (let i = 0; i < 100; i++) {
-        soldiers.push(new soldier(i))
+        soldiers.push(new soldier(i)) // new的时候会将 __proto__ 指向 soldier.prototype
     }
 }

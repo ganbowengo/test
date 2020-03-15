@@ -3,7 +3,7 @@
  * @Author: ganbowen
  * @Date: 2020-03-03 16:16:52
  * @LastEditors: ganbowen
- * @LastEditTime: 2020-03-03 19:20:54
+ * @LastEditTime: 2020-03-13 18:05:55
  */
 var fs = require('fs');
 var readline = require('readline');
@@ -11,6 +11,7 @@ var path = require('path');
 const HTTP_REG = /(((http[s]?|ftp):)?(:)?\/\/[A-Za-z0-9\-]+[.]{1}([A-Za-z0-9\-]+[.]?)+)/
 var filePath1 = path.resolve('/Users/baiwang/work/mainsite');
 var filePath2 = path.resolve('/Users/baiwang/work/HuanghePages');
+var filePath3 = path.resolve('/Users/baiwang/work/jingGangShan-thin');
 const obj = {}
 const arr = []
 var fWriteName = './data.js';
@@ -63,12 +64,13 @@ function fileDisplay(filePath) {
         }
     })
 }
-fileDisplay(filePath1);
-fileDisplay(filePath2);
+// fileDisplay(filePath1);
+// fileDisplay(filePath2);
+fileDisplay(filePath3, fWriteName);
 
 setTimeout(function () {
     result()
-}, 3000)
+}, 5000)
 
 
 
@@ -76,7 +78,7 @@ setTimeout(function () {
 const resultObj = {}
 const resultArr = []
 const resultURl = './result.js'
-const filterREG = /(cdn|org|tree|google|github|mozilla|jquery|ui|api|web|youtube|baidu|developer|layer|microsoft|window|this|oSpa|console|js)+/i
+const filterREG = /(cdn|stackoverflow|org|tree|google|github|mozilla|jquery|ui|web|youtube|baidu|developer|layer|microsoft|window|this|oSpa|console|js)+/i
 const filterREG1 = /^\/\/[A-Za-z0-9\-]+[.]{1}([A-Za-z0-9\-]+)?$/
 function result() {
     var fRead = fs.createReadStream('/Users/baiwang/code-study/test/readFIle/data.js');
