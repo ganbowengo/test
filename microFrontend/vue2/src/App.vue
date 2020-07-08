@@ -2,8 +2,8 @@
  * @Descripttion: 
  * @Author: ganbowen
  * @Date: 2020-02-04 14:35:19
- * @LastEditors  : ganbowen
- * @LastEditTime : 2020-02-04 17:02:02
+ * @LastEditors: ganbowen
+ * @LastEditTime: 2020-03-17 17:31:13
  -->
 <
 <template>
@@ -16,11 +16,24 @@
 <script>
 // @ is an alias to /src
 import HelloWorld from "@/components/HelloWorld.vue";
-
+var myMixin = {
+  created: function () {
+    this.hello()
+  },
+  methods: {
+    hello: function () {
+      console.log('hello from mixin!')
+    }
+  }
+}
 export default {
     name: "home",
     components: {
         HelloWorld
+    },
+    mixins: [myMixin],
+    created: function () {
+        console.log('main')
     }
 };
 </script>
