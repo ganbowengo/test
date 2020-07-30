@@ -2,22 +2,22 @@
  * @Descripttion: 
  * @Author: ganbowen
  * @Date: 2020-01-05 16:59:37
- * @LastEditors  : ganbowen
- * @LastEditTime : 2020-01-06 15:31:20
+ * @LastEditors: ganbowen
+ * @LastEditTime: 2020-07-30 17:37:07
  */
 const PENDING = 'pending'
 const FULFILLED = 'fulfilled'
 const REJECTED = 'rejected'
 
 
-function Promise1(executor) {
+function Promise1 (executor) {
     let _this = this
     _this.status = PENDING
     _this.onResolveArr = []
     _this.onRejectArr = []
     _this.value = undefined; // fulfilled状态时 返回的信息
     _this.reason = undefined; // rejected状态时 拒绝的原因
-    function resolve(value) {
+    function resolve (value) {
         if (value instanceof Promise1) return value.then(resolve, reject)
         setTimeout(() => {
             if (_this.status === PENDING) {
@@ -28,7 +28,7 @@ function Promise1(executor) {
         }, 0)
     }
 
-    function reject(reason) {
+    function reject (reason) {
         setTimeout(() => {
             if (_this.status === PENDING) {
                 _this.status = REJECTED
@@ -45,7 +45,7 @@ function Promise1(executor) {
     }
 }
 
-function resolvePromise(promise2, x, resolve, reject) {
+function resolvePromise (promise2, x, resolve, reject) {
     if (promise2 === x) return reject(new TypeError('循环引用'))
     /**
      *  // 循环引用
@@ -177,7 +177,8 @@ Promise1.prototype.catch = function (onReject) {
     return this.then(null, onReject);
 }
 
-function gen(len, resolve) {
+// 偏函数+哨兵变量 实现异步协同
+function gen (len, resolve) {
     let count = 0
     let values = []
     return function (i, value) {
@@ -199,7 +200,7 @@ Promise1.all = function (promises) {
     })
 }
 
-Promise1.race = function () {
+Promise1.race = function (promises) {
     return new Promise1((resolve, reject) => {
         promises.forEach((promise) => {
             promise.then(resolve, reject)
@@ -221,15 +222,15 @@ Promise1.reject = function (value) {
 
 
 // let demo = new Promise1((resolve, reject) => {
-    // let value = Math.random() * 10
-    // if (value > 5) {
-    // resolve(value)
-    // } else {
-    //     reject(value)
-    // }
+// let value = Math.random() * 10
+// if (value > 5) {
+// resolve(value)
+// } else {
+//     reject(value)
+// }
 // })
 
-function onResolve(value) {
+function onResolve (value) {
     console.log('onResolve+++++', value)
     return new Promise1((resolve, reject) => {
         resolve(123)
@@ -238,7 +239,7 @@ function onResolve(value) {
     })
 }
 
-function onReject(value) {
+function onReject (value) {
     console.log('onReject++++++', value)
     // return new Promise1((resolve, reject) => {
     //     reject(100)
@@ -254,7 +255,7 @@ function onReject(value) {
 //     console.log('erceng', e)
 // })
 
-let promise = new Promise1((resolve,reject) => {
+let promise = new Promise1((resolve, reject) => {
     resolve(true)
 }).then(value => {
     return promise.then(val => {
