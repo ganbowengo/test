@@ -3,7 +3,7 @@
  * @Author: ganbowen
  * @Date: 2020-01-05 16:59:37
  * @LastEditors: ganbowen
- * @LastEditTime: 2020-07-30 17:37:07
+ * @LastEditTime: 2020-08-04 18:45:51
  */
 const PENDING = 'pending'
 const FULFILLED = 'fulfilled'
@@ -69,7 +69,9 @@ function resolvePromise (promise2, x, resolve, reject) {
         */
         if (x.status === PENDING) {
             try {
+                console.log('123__________-----------', 111)
                 x.then(y => {
+                    console.log('111===========', 1111)
                     resolvePromise(promise2, y, resolve, reject)
                 }, reason => {
                     reject(reason)
@@ -80,8 +82,6 @@ function resolvePromise (promise2, x, resolve, reject) {
         } else { // 同一个promise连续调用then
             /**
              *  // 已经触发的Promise
-
-
              */
             x.then(resolve, reject)
         }
@@ -121,6 +121,7 @@ Promise1.prototype.then = function (onResolve, onReject) {
         以下的setTimeout的使用是因为 then/catch 可以在同一个promise对象中连续使用
         要保证上一个then已经执行完成
     */
+    console.log('_this.status', _this.status)
     if (_this.status === FULFILLED) {
         return promise2 = new Promise1((resolve, reject) => {
             setTimeout(() => {
@@ -210,6 +211,7 @@ Promise1.race = function (promises) {
 
 Promise1.resolve = function (value) {
     return new Promise1(resolve => {
+        console.log('1211_+++++++++++++++++')
         resolve(value)
     })
 }
@@ -255,12 +257,46 @@ function onReject (value) {
 //     console.log('erceng', e)
 // })
 
-let promise = new Promise1((resolve, reject) => {
-    resolve(true)
-}).then(value => {
-    return promise.then(val => {
-        console.log('1233213')
-    })
+// let promise = new Promise1((resolve, reject) => {
+//     resolve(true)
+// }).then(value => {
+//     console.log('123', 1)
+//     new Promise1((resolve, reject) => {
+//         console.log('内部promise')
+//         resolve()
+//     }).then(() => {
+//         console.log('内部第一个then')
+//         return Promise1.resolve()
+//     }).then((v) => {
+//         console.log('内部第二个then', v)
+//     }).then((v) => {
+//         console.log('内部第san个then', v)
+//     }).then((v) => {
+//         console.log('内部第si个then', v)
+//     })
+// }).then(value => {
+//     console.log('123', 2, value)
+//     // return promise.then(val => {
+//     //     console.log('1233213')
+//     // })
+// }).then(value => {
+//     console.log('123', 3, value)
+//     // return promise.then(val => {
+//     //     console.log('1233213')
+//     // })
+// }).then(value => {
+//     console.log('123', 4, value)
+// }).then(val => {
+//     console.log('val', 5, val)
+// })
+
+let a = new Promise1((resolve, reject) => {
+    resolve(123)
+}).then(v => {
+    console.log('v', v)
+    return a
+}).then(v => {
+    console.log('v', v)
 })
 
 /**
@@ -268,5 +304,6 @@ let promise = new Promise1((resolve, reject) => {
  * promise的then中方法先保存到一个回调函数队列中
  * 当promise对象实例化时，触发内部 resolve 或者 reject 方法
  * 在resolve中执行回调函数队列中的then中的回调函数
+ * 每resolve一次 就需要将当前回调向settimeout队列之后移动一步
  *
  * */
