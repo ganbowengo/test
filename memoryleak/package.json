@@ -9,7 +9,6 @@
   "author": "ganbowen",
   "license": "ISC",
   "dependencies": {
-    "heapdump": "^0.3.15",
-    "jquery": "^3.5.1"
+    "heapdump": "^0.3.15"
   }
 }

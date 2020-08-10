@@ -1,0 +1,150 @@
+<!--
+ * @Descripttion: 
+ * @Author: ganbowen
+ * @Date: 2020-08-07 10:35:50
+ * @LastEditors: ganbowen
+ * @LastEditTime: 2020-08-10 11:23:16
+-->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<style>
+    .first {
+        stroke-dasharray: 20;
+        stroke-dashoffset: 20;
+        animation: first 3s linear infinite;
+        animation-fill-mode: both;
+    }
+
+    @keyframes first {
+        12.5% {
+            stroke-dashoffset: 0;
+        }
+
+        37.5% {
+            stroke-dashoffset: 0;
+        }
+
+        45% {
+            stroke-dashoffset: -20;
+        }
+
+        50% {
+            stroke-dashoffset: -17.5;
+        }
+
+        100% {
+            stroke-dashoffset: -17.5;
+        }
+    }
+
+
+    .second {
+        stroke-dasharray: 150;
+        stroke-dashoffset: 150;
+        animation: second 3s linear infinite;
+        animation-fill-mode: both;
+    }
+
+    @keyframes second {
+        12.5% {
+            stroke-dashoffset: 150;
+        }
+
+        37.5% {
+            stroke-dashoffset: 0;
+        }
+
+        100% {
+            stroke-dashoffset: 0;
+        }
+    }
+
+    .thrid {
+        stroke-dasharray: 100;
+        stroke-dashoffset: 100;
+        animation: thrid 3s linear infinite;
+        animation-fill-mode: both;
+    }
+
+    @keyframes thrid {
+        50% {
+            stroke-dashoffset: 100;
+        }
+
+        62.5% {
+            stroke-dashoffset: 0;
+        }
+
+        75% {
+            stroke-dashoffset: 0;
+        }
+
+        100% {
+            stroke-dashoffset: 0;
+        }
+    }
+
+    .four {
+        opacity: 0;
+        zoom: 0;
+        animation: show 3s linear infinite;
+    }
+
+    @keyframes show {
+        62.5% {
+            opacity: 0;
+            zoom: 0;
+        }
+
+        80% {
+            opacity: 1;
+            zoom: 1;
+        }
+
+        85% {
+            opacity: 0;
+            zoom: 0;
+        }
+
+        90% {
+            opacity: 1;
+            zoom: 1;
+        }
+
+        95% {
+            opacity: 0;
+            zoom: 0;
+        }
+
+        100% {
+            opacity: 1;
+            zoom: 1;
+        }
+    }
+
+    .svg {
+        width: 80px;
+        height: 60px;
+    }
+</style>
+
+<body>
+    <svg version="1.1" xmlns="http://www.w3.org/2000/svg" class="svg">
+        <path class="path first" fill="transparent" stroke="#387ede" stroke-width="5" d="M20 50 L 20 30" />
+        <path class="path second" fill="transparent" stroke="#387ede" stroke-width="5"
+            d="M20 30 A 10 10 0 1 1 60 30 A 5 5 0 1 1 60 50 L 20 50" />
+        <path class="path thrid" fill="transparent" stroke="#387ede" stroke-width="5"
+            d="M20 30 A 5 5 0 1 0 20 50 A 5 5 0 1 0 20 30" />
+        <path class="four" stroke="#1baa51" stroke-width="5"
+            d="M57.5 40 A 2.5 2.5 0 1 0 62.5 40 A 2.5 2.5 0 1 0 57.5 40" />
+    </svg>
+</body>
+
+</html>
