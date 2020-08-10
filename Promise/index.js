@@ -3,7 +3,7 @@
  * @Author: ganbowen
  * @Date: 2020-01-05 16:59:37
  * @LastEditors: ganbowen
- * @LastEditTime: 2020-08-04 18:45:51
+ * @LastEditTime: 2020-08-10 15:43:13
  */
 const PENDING = 'pending'
 const FULFILLED = 'fulfilled'
@@ -307,3 +307,16 @@ let a = new Promise1((resolve, reject) => {
  * 每resolve一次 就需要将当前回调向settimeout队列之后移动一步
  *
  * */
+
+// 循环引用
+// const promise = Promise1.resolve()
+//     .then(() => {
+//         return promise
+//     })
+// promise.catch(console.error)
+
+// 值穿透 - value => value
+Promise1.resolve(1)
+    .then(2)
+    .then(Promise.resolve(3))
+    .then(console.log)
