@@ -1,0 +1,63 @@
+<!--
+ * @Descripttion: 
+ * @Author: ganbowen
+ * @Date: 2020-11-19 14:47:25
+ * @LastEditors: ganbowen
+ * @LastEditTime: 2020-11-23 15:16:11
+-->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>下载</title>
+</head>
+
+<body>
+    <button id='button'>Download</button>
+    <a href="前后台交互接口文档.doc" target='_block'>Download</a>
+    <button id='abutton'>Download</button>
+
+    <script>
+        var btn = document.getElementById('button')
+        var abutton = document.getElementById('abutton')
+
+        if (btn.addEventListener) {
+            abutton.addEventListener('click', down);
+        } else {
+            abutton.attachEvent('onclick', down);
+        }
+
+        function download(url) {
+            var iframe = document.createElement('iframe');
+            iframe.style.display = 'none';
+            iframe.src = '';
+            document.body.appendChild(iframe);
+            setTimeout(function loadUrl() {
+                iframe.contentWindow.location.href = url;
+            }, 50);
+        }
+
+        function down() {
+            var a = ['前后台交互接口文档.doc', '前后台交互接口文档1.doc', '前后台交互接口文档2.doc']
+            while (a.length) {
+                download(a.pop())
+            }
+        }
+
+        function aDownload(url) {
+            var elink = document.createElement('a')
+            var date = new Date().getTime()
+            console.log('date', date)
+            elink.style.display = 'none'
+            elink.target = '_block'
+            elink.href = url + "?_t=" + date
+            document.body.appendChild(elink)
+            elink.click()
+            document.body.removeChild(elink)
+        }
+    </script>
+</body>
+
+</html>

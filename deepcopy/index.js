@@ -3,7 +3,7 @@
  * @Author: ganbowen
  * @Date: 2020-10-15 18:40:40
  * @LastEditors: ganbowen
- * @LastEditTime: 2020-10-16 15:42:52
+ * @LastEditTime: 2020-10-16 16:06:52
  */
 
 function deepCopy (obj, map = new WeakMap()) {
@@ -28,7 +28,9 @@ function deepCopy (obj, map = new WeakMap()) {
         return map.get(obj)
     }
 
-    let cloneObj = Array.isArray(obj) ? [] : new obj.constructor()
+    let cloneObj = obj.constructor === Object ?
+        Object.create(new obj.constructor(), Object.getOwnPropertyDescriptor(obj))
+        : new obj.constructor()
 
     // weakMap 
     map.set(obj, cloneObj)
@@ -50,7 +52,7 @@ function deepCopy (obj, map = new WeakMap()) {
     }
 
     // [] {}
-    let keys = Object.keys(obj).concat(Object.getOwnPropertySymbols(obj))
+    let keys = Object.getOwnPropertyNames(obj).concat(Object.getOwnPropertySymbols(obj))
     keys.forEach(item => {
         cloneObj[item] = deepCopy(obj[item], map)
     })
