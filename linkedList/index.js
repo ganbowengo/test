@@ -2,26 +2,58 @@
  * @Descripttion: 
  * @Author: ganbowen
  * @Date: 2020-01-02 15:11:05
- * @LastEditors  : ganbowen
- * @LastEditTime : 2020-01-02 22:07:42
+ * @LastEditors: ganbowen
+ * @LastEditTime: 2021-01-28 19:16:54
  */
-function Node(data) {
-    this.data = data
-    this.next = null
+
+
+function createList (arr) {
+    function Node (val) {
+        this.val = val
+        this.next = null
+    }
+    let result = null
+    arr.reduce((a, b) => {
+        if (a instanceof Node) {
+            a.next = b !== null ? new Node(b) : null
+        } else {
+            result = a = new Node(a)
+            a.next = new Node(b)
+        }
+        return a.next
+    })
+    return result
 }
 
-function addNode(head, val) {
-    let temp = head
-    while (temp.next !== null) {
-        temp = temp.next
+let list = createList([1, 2, 3, 4])
+console.log('list', list)
+
+
+function reverse (list) {
+    if (list === null || list.next === null) {
+        return list
     }
-    temp.next = new Node(val)
+    let newList = reverse(list.next)
+    list.next.next = list
+    list.next = null
+    return newList
 }
 
-function linkedList(arr) {
-    let head = new Node(0)
-    for (let i = 0, l = arr.length; i < l; i++) {
-        head.next
+// 双指针 
+// prev 在后 
+// current在前
+function reverse1 (list) {
+    let prev = null
+    let current = list
+    while (current) {
+        let temp = current.next
+        current.next = prev
+        prev = current
+        current = temp
     }
+    return prev
 }
-console.log(__dirname,__filename)
+
+console.log('list2', reverse1(list))
+
+
