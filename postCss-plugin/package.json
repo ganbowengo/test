@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "postcss": "^8.2.8",
+    "postcss-nesting": "^7.0.1"
+  }
+}
