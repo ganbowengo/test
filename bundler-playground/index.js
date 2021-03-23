@@ -2,7 +2,7 @@
  * @Author       : ganbowen
  * @Date         : 2021-03-22 22:05:17
  * @LastEditors  : ganbowen
- * @LastEditTime : 2021-03-22 22:23:38
+ * @LastEditTime : 2021-03-23 19:17:49
  * @Descripttion : 
  */
 const fs = require("fs");
@@ -84,4 +84,4 @@ function pack(graph) {
     return iifeBundler;
 }
 
-console.log('', eval(pack(createDependencyGraph(path.resolve(__dirname, 'test.js')))))
+fs.writeFileSync('test.bundle.js', pack(createDependencyGraph(path.resolve(__dirname, 'test.js'))))
