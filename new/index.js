@@ -2,8 +2,8 @@
  * @Descripttion: 
  * @Author: ganbowen
  * @Date: 2020-01-07 15:27:58
- * @LastEditors: ganbowen
- * @LastEditTime: 2020-03-12 15:50:35
+ * @LastEditors  : ganbowen
+ * @LastEditTime : 2021-03-25 20:01:06
  */
 
 
@@ -99,3 +99,15 @@ let soldierPro = {
         soldiers.push(new soldier(i)) // new的时候会将 __proto__ 指向 soldier.prototype
     }
 }
+
+// 实现一个newFunc
+function newFunc(...args) {
+    const constructor = args.shift()
+    const obj = Object.create(constructor.prototype)
+    const result = constructor.apply(obj, args)
+    return (typeof result === 'object' && result !== null) ? result : obj
+}
+
+// newFunc(soldier)
+// new soldier()
+
