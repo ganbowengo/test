@@ -2,15 +2,24 @@
  * @Author       : ganbowen
  * @Date         : 2021-04-07 21:10:39
  * @LastEditors  : ganbowen
- * @LastEditTime : 2021-04-07 21:38:47
+ * @LastEditTime : 2021-04-07 21:52:31
  * @Descripttion : promise node v12+
  */
 // 1. 实现同步版本
 // 2. 实现简易版异步版本
 // 3. 实现多个then方法调用
+// 4. 实现then方法链式是调用
 const PENDING = 'pending'
 const FULFUILLED = 'fulfilled'
 const REJECTED = 'rejected'
+
+function resolvePromise (x, resolve, reject) {
+    if(x instanceof Promise1) {
+        x.then(resolve, reject)
+    } else {
+        resolve(x)
+    }
+}
 
 class Promise1 {
     status = PENDING
@@ -44,14 +53,18 @@ class Promise1 {
     }
 
     then = (fulfillFn, rejectedFn) => {
-        if (this.status === FULFUILLED) {
-            fulfillFn(this.value)
-        } else if (this.status === REJECTED) {
-            rejectedFn(this.reason)
-        } else if (this.status === PENDING) {
-            this.fulfillCallbacks.push(fulfillFn)
-            this.rejectedCallbacks.push(rejectedFn)
-        }
+        const promise2 = new Promise1 ((resolve, reject) => {
+            if (this.status === FULFUILLED) {
+                let x = fulfillFn(this.value)
+                resolvePromise(x, resolve, reject)
+            } else if (this.status === REJECTED) {
+                rejectedFn(this.reason)
+            } else if (this.status === PENDING) {
+                this.fulfillCallbacks.push(fulfillFn)
+                this.rejectedCallbacks.push(rejectedFn)
+            }
+        })
+        return promise2
     }
 
     catch = (rejectedFn) => {
@@ -61,6 +74,7 @@ class Promise1 {
     }
 }
 
+// 同步版本测试用例
 new Promise1((resolve, reject) => {
     resolve('res')
     reject('err')
@@ -70,6 +84,7 @@ new Promise1((resolve, reject) => {
     console.log('reason', reason)
 })
 
+// 异步版本测试用例
 new Promise1((resolve, reject) => {
     setTimeout(() => {
         resolve('setTimeout - res')
@@ -80,24 +95,47 @@ new Promise1((resolve, reject) => {
     console.log('reason', reason)
 })
 
+// 多then版本测试用例
 const promise = new Promise1((resolve, reject) => {
     setTimeout(() => {
       resolve('success')
     }, 2000); 
-  })
+})
   
-  promise.then(value => {
+promise.then(value => {
     console.log(1)
     console.log('resolve', value)
-  })
-   
-  promise.then(value => {
+})
+
+promise.then(value => {
     console.log(2)
     console.log('resolve', value)
-  })
-  
-  promise.then(value => {
+})
+
+promise.then(value => {
     console.log(3)
     console.log('resolve', value)
-  })
-  
+})    
+
+
+// then链式调用测试用例
+const promise1 = new Promise1((resolve, reject) => {
+    // 目前这里只处理同步的问题
+    resolve('then - Multiple')
+})
+
+function other () {
+    return new Promise1((resolve, reject) =>{
+        resolve('other')
+    })
+}
+
+// then方法链式是调用测试用例
+promise1.then(value => {
+    console.log(1)
+    console.log('resolve', value)
+    return other()
+}).then(value => {
+    console.log(2)
+    console.log('resolve', value)
+})
