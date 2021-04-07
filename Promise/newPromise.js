@@ -2,18 +2,22 @@
  * @Author       : ganbowen
  * @Date         : 2021-04-07 21:10:39
  * @LastEditors  : ganbowen
- * @LastEditTime : 2021-04-07 21:52:31
+ * @LastEditTime : 2021-04-07 21:59:42
  * @Descripttion : promise node v12+
  */
 // 1. 实现同步版本
 // 2. 实现简易版异步版本
 // 3. 实现多个then方法调用
 // 4. 实现then方法链式是调用
+// 5. 排除then链式调用返回值是promise实例本身
 const PENDING = 'pending'
 const FULFUILLED = 'fulfilled'
 const REJECTED = 'rejected'
 
-function resolvePromise (x, resolve, reject) {
+function resolvePromise (promise2, x, resolve, reject) {
+    if(promise2 === x) {
+        return reject(new TypeError('Chaining cycle detected for promise #<Promise>'))
+    }
     if(x instanceof Promise1) {
         x.then(resolve, reject)
     } else {
@@ -55,8 +59,10 @@ class Promise1 {
     then = (fulfillFn, rejectedFn) => {
         const promise2 = new Promise1 ((resolve, reject) => {
             if (this.status === FULFUILLED) {
-                let x = fulfillFn(this.value)
-                resolvePromise(x, resolve, reject)
+                queueMicrotask(() => {
+                    let x = fulfillFn(this.value)
+                    resolvePromise(promise2, x, resolve, reject)
+                })
             } else if (this.status === REJECTED) {
                 rejectedFn(this.reason)
             } else if (this.status === PENDING) {
@@ -138,4 +144,13 @@ promise1.then(value => {
 }).then(value => {
     console.log(2)
     console.log('resolve', value)
+})
+
+// then方法中promise循环调用
+const promise2 = new Promise((resolve, reject) => {
+    resolve(100)
+})
+const p1 = promise2.then(value => {
+    console.log(value)
+    return p1
 })
