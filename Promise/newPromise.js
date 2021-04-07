@@ -2,7 +2,7 @@
  * @Author       : ganbowen
  * @Date         : 2021-04-07 21:10:39
  * @LastEditors  : ganbowen
- * @LastEditTime : 2021-04-07 22:07:09
+ * @LastEditTime : 2021-04-07 22:45:05
  * @Descripttion : promise node v12+
  */
 // 1. 实现同步版本
@@ -11,6 +11,7 @@
 // 4. 实现then方法链式是调用
 // 5. 排除then链式调用返回值是promise实例本身
 // 6. 实现错误捕获及then的链式调用其他状态代码补充
+// 7. 实现catch方法，then中方法的异常捕获处理，then中回调函数可选
 const PENDING = 'pending'
 const FULFUILLED = 'fulfilled'
 const REJECTED = 'rejected'
@@ -19,8 +20,36 @@ function resolvePromise (promise2, x, resolve, reject) {
     if(promise2 === x) {
         return reject(new TypeError('Chaining cycle detected for promise #<Promise>'))
     }
-    if(x instanceof Promise1) {
-        x.then(resolve, reject)
+    if (typeof x === 'object' || typeof x === 'function') {
+        if (x === null) {
+            return resolve(x)
+        }
+        let then
+        try {
+            then = x.then
+        } catch (e) {
+            return reject(e)
+        }
+        
+        if (typeof then === 'function') {
+            let called = false
+            try {
+                then.call(x, y => {
+                    if (called) return
+                    called = true
+                    resolvePromise(promise2, y, resolve, reject)
+                }, r => {
+                    if (called) return
+                    called = true
+                    reject(r)
+                })
+            } catch (e) {
+                if (called) return;
+                reject(e)
+            }
+        } else {
+            resolve(x)
+        }
     } else {
         resolve(x)
     }
@@ -62,8 +91,10 @@ class Promise1 {
     }
 
     then = (fulfillFn, rejectedFn) => {
+        fulfillFn = typeof fulfillFn === 'function' ? fulfillFn : value => value
+        rejectedFn = typeof rejectedFn === 'function' ? rejectedFn : reason => { throw reason }
         const promise2 = new Promise1 ((resolve, reject) => {
-            if (this.status === FULFUILLED) {
+            const fulfilledMicrotask = () => {
                 queueMicrotask(() => {
                     try {
                         let x = fulfillFn(this.value)
@@ -72,116 +103,42 @@ class Promise1 {
                         reject(e)
                     }
                 })
+            }
+            const rejectedMicrotask = () => {
+                queueMicrotask(() => {
+                    try {
+                        let x = rejectedFn(this.reason)
+                        resolvePromise(promise2, x, resolve, reject)
+                    } catch (e) {
+                        reject(e)
+                    }
+                })
+            }
+            if (this.status === FULFUILLED) {
+                fulfilledMicrotask()
             } else if (this.status === REJECTED) {
-                rejectedFn(this.reason)
+                rejectedMicrotask()
             } else if (this.status === PENDING) {
-                this.fulfillCallbacks.push(fulfillFn)
-                this.rejectedCallbacks.push(rejectedFn)
+                this.fulfillCallbacks.push(fulfilledMicrotask)
+                this.rejectedCallbacks.push(rejectedMicrotask)
             }
         })
         return promise2
     }
 
     catch = (rejectedFn) => {
-        if (this.status === REJECTED) {
-            rejectedFn(this.reason)
-        }
+        return this.then(null, rejectedFn)
     }
 }
 
-// 同步版本测试用例
-new Promise1((resolve, reject) => {
-    resolve('res')
-    reject('err')
-}).then(res => {
-    console.log('res', res)
-}, reason => {
-    console.log('reason', reason)
-})
 
-// 异步版本测试用例
-new Promise1((resolve, reject) => {
-    setTimeout(() => {
-        resolve('setTimeout - res')
-    }, 1000)
-}).then(res => {
-    console.log('res', res)
-}, reason => {
-    console.log('reason', reason)
-})
-
-// 多then版本测试用例
-const promise = new Promise1((resolve, reject) => {
-    setTimeout(() => {
-      resolve('success')
-    }, 2000); 
-})
-  
-promise.then(value => {
-    console.log(1)
-    console.log('resolve', value)
-})
-
-promise.then(value => {
-    console.log(2)
-    console.log('resolve', value)
-})
-
-promise.then(value => {
-    console.log(3)
-    console.log('resolve', value)
-})    
-
-
-// then链式调用测试用例
-const promise1 = new Promise1((resolve, reject) => {
-    // 目前这里只处理同步的问题
-    resolve('then - Multiple')
-})
-
-function other () {
-    return new Promise1((resolve, reject) =>{
-        resolve('other')
+Promise1.deferred = function () {
+    var result = {}
+    result.promise = new Promise1(function (resolve, reject) {
+      result.resolve = resolve
+      result.reject = reject
     })
+  
+    return result
 }
-
-// then方法链式是调用测试用例
-promise1.then(value => {
-    console.log(1)
-    console.log('resolve', value)
-    return other()
-}).then(value => {
-    console.log(2)
-    console.log('resolve', value)
-})
-
-// then方法中promise循环调用
-const promise2 = new Promise((resolve, reject) => {
-    resolve(100)
-})
-const p1 = promise2.then(value => {
-    console.log(value)
-    return p1
-})
-
-const promise3 = new Promise1((resolve, reject) => {
-    // resolve('success')
-    throw new Error('执行器错误')
- })
- 
-// 实现错误捕获及then的链式调用其他状态代码补充 测试用例
-// 第一个then方法中的错误要在第二个then方法中捕获到
-promise3.then(value => {
-  console.log(1)
-  console.log('resolve', value)
-  throw new Error('then error')
-}, reason => {
-  console.log(2)
-  console.log('reason', reason.message)
-}).then(value => {
-  console.log(3)
-  console.log(value);
-}, reason => {
-  console.log(4)
-  console.log('reason', sreason.message)
-})
+module.exports = Promise1
