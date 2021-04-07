@@ -2,7 +2,7 @@
  * @Author       : ganbowen
  * @Date         : 2021-04-07 21:10:39
  * @LastEditors  : ganbowen
- * @LastEditTime : 2021-04-07 21:59:42
+ * @LastEditTime : 2021-04-07 22:07:09
  * @Descripttion : promise node v12+
  */
 // 1. 实现同步版本
@@ -10,6 +10,7 @@
 // 3. 实现多个then方法调用
 // 4. 实现then方法链式是调用
 // 5. 排除then链式调用返回值是promise实例本身
+// 6. 实现错误捕获及then的链式调用其他状态代码补充
 const PENDING = 'pending'
 const FULFUILLED = 'fulfilled'
 const REJECTED = 'rejected'
@@ -33,7 +34,11 @@ class Promise1 {
     rejectedCallbacks = []
 
     constructor (executor) {
-        executor(this.resolve, this.reject)
+        try {
+            executor(this.resolve, this.reject)
+        } catch (e) {
+            this.reject(e)
+        }
     }
 
     resolve = (value) => {
@@ -60,8 +65,12 @@ class Promise1 {
         const promise2 = new Promise1 ((resolve, reject) => {
             if (this.status === FULFUILLED) {
                 queueMicrotask(() => {
-                    let x = fulfillFn(this.value)
-                    resolvePromise(promise2, x, resolve, reject)
+                    try {
+                        let x = fulfillFn(this.value)
+                        resolvePromise(promise2, x, resolve, reject)
+                    } catch (e) {
+                        reject(e)
+                    }
                 })
             } else if (this.status === REJECTED) {
                 rejectedFn(this.reason)
@@ -153,4 +162,26 @@ const promise2 = new Promise((resolve, reject) => {
 const p1 = promise2.then(value => {
     console.log(value)
     return p1
+})
+
+const promise3 = new Promise1((resolve, reject) => {
+    // resolve('success')
+    throw new Error('执行器错误')
+ })
+ 
+// 实现错误捕获及then的链式调用其他状态代码补充 测试用例
+// 第一个then方法中的错误要在第二个then方法中捕获到
+promise3.then(value => {
+  console.log(1)
+  console.log('resolve', value)
+  throw new Error('then error')
+}, reason => {
+  console.log(2)
+  console.log('reason', reason.message)
+}).then(value => {
+  console.log(3)
+  console.log(value);
+}, reason => {
+  console.log(4)
+  console.log('reason', sreason.message)
 })
