@@ -3,7 +3,7 @@
  * @Author: ganbowen
  * @Date: 2020-01-06 15:48:37
  * @LastEditors  : ganbowen
- * @LastEditTime : 2020-01-06 22:04:21
+ * @LastEditTime : 2021-04-07 10:14:40
  */
 
 
@@ -86,3 +86,53 @@ Person2.on('Person2', function (e) {
 Person1.emit('Person1', '我可以送西瓜')
 Person2.emit('Person2', '我可以送苹果')
 
+class Emitter {
+    constructor () {
+        this.events = new Object()
+    }
+    
+    on (event, fn) {
+        if(typeof fn !== 'function') throw new Error('Fn must be a function')
+        if (!this.events[event]) {
+            this.events[event] = new Array()
+        }
+        this.events[event].push((...args) => {
+            fn(...args)
+        })
+        return this
+    }
+
+    once (event, fn) {
+        if (!this.events[event]) {
+            this.events[event] = new Array()
+        }
+        this.events[event].push((...args) => {
+            fn(...args)
+            this.remove(event, fn)
+        })
+    }
+
+    emit (event, ...args) {
+        if (this.events[event]) {
+            this.events[event].forEach(fn => {
+                fn(...args)
+            })
+        } else {
+            throw new Error('Event not registered')
+        }
+        return this
+    }
+
+    off (event, fn) {
+        if(this.events[event]) {
+            let index = this.events[event].indexOf(fn)
+            if(index > -1)
+                this.events[event].splice(index, 1)
+            else
+                delete this.events[event]
+        } else {
+            throw new Error('Event not find')
+        }
+        return this
+    }
+}

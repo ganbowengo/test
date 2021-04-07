@@ -217,7 +217,7 @@ const sort = {
 
 let arr = [1, 2, 3, 1, 8, 6, 9, 4, 3]
 console.time('sort')
-sort.bubble(arr)
+sort.heap(arr)
 console.timeEnd('sort')
 
 console.log('arr', arr)
