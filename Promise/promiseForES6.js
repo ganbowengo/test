@@ -2,8 +2,8 @@
  * @Descripttion: 
  * @Author: ganbowen
  * @Date: 2020-08-04 10:24:44
- * @LastEditors: ganbowen
- * @LastEditTime: 2020-08-04 18:49:50
+ * @LastEditors  : ganbowen
+ * @LastEditTime : 2021-09-10 10:24:52
  */
 
 const PENDING = 'pending'
@@ -48,8 +48,8 @@ class Promise2 {
     then (successCb, errorCb) {
         let onResolve = typeof successCb === 'function' ? successCb : value => value
         let onReject = typeof errorCb === 'function' ? errorCb : value => value
-        if (this.status === FULFILLED) {
-            let promise = new Promise2((resolve, reject) => {
+        let promise = new Promise2((resolve, reject) => {
+            if (this.status === FULFILLED) {
                 setTimeout(_ => {
                     try {
                         let x = onResolve(this.value)
@@ -58,12 +58,9 @@ class Promise2 {
                         reject(e)
                     }
                 })
-            })
-            return promise
-        }
+            }
 
-        if (this.status === REJECTED) {
-            let promise = new Promise2((resolve, reject) => {
+            if (this.status === REJECTED) {
                 setTimeout(_ => {
                     try {
                         let x = onReject(this.reason)
@@ -72,12 +69,9 @@ class Promise2 {
                         reject(e)
                     }
                 })
-            })
-            return promise
-        }
+            }
 
-        if (this.status === PENDING) {
-            let promise = new Promise2((resolve, reject) => {
+            if (this.status === PENDING) {
                 this.successCbs.push(value => {
                     try {
                         let x = onResolve(value)
@@ -94,9 +88,9 @@ class Promise2 {
                         reject(e)
                     }
                 })
-            })
-            return promise
-        }
+            }
+        })
+        return promise
     }
 
     catch (onReject) {
