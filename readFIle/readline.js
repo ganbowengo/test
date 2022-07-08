@@ -9,9 +9,9 @@
 var fs = require('fs');
 var readline = require('readline');
 var path = require('path');
-// var filePath = path.resolve('/Users/baiwang/work/ctims-admin/dist'); // 2.0
-// var filePath = path.resolve('/Users/baiwang/work/UKey_Page/web/billing-software/src'); // 开票软件
-var filePath = path.resolve('/Users/baiwang/code-study/test/readFIle'); // 开票软件
+// var filePath = path.resolve('/Users/--/work/ctims-admin/dist'); // 2.0
+// var filePath = path.resolve('/Users/--/work/UKey_Page/web/billing-software/src'); // 开票软件
+var filePath = path.resolve('/Users/--/code-study/test/readFIle'); // 开票软件
 
 let sums = 0
 function fileDisplay (filePath) {

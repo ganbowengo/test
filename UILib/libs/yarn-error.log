@@ -1,8 +1,8 @@
 Arguments: 
-  /Users/baiwang/.nvm/versions/node/v8.16.2/bin/node /usr/local/Cellar/yarn/1.19.1/libexec/bin/yarn.js init
+  /Users/--/.nvm/versions/node/v8.16.2/bin/node /usr/local/Cellar/yarn/1.19.1/libexec/bin/yarn.js init
 
 PATH: 
-  /Users/baiwang/.nvm/versions/node/v8.16.2/bin:/Library/Java/JavaVirtualMachines/jdk1.8.0_231.jdk/Contents/Home/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/Users/baiwang/.nvm/versions/node/v8.16.2/bin:/Library/Java/JavaVirtualMachines/jdk1.8.0_231.jdk/Contents/Home/bin:.:/Users/baiwang/Downloads/android-sdk-macosx/platform-tools:/Users/baiwang/Downloads/android-sdk-macosx/tool:.:/Users/baiwang/Downloads/android-sdk-macosx/platform-tools:/Users/baiwang/Downloads/android-sdk-macosx/tool
+  /Users/--/.nvm/versions/node/v8.16.2/bin:/Library/Java/JavaVirtualMachines/jdk1.8.0_231.jdk/Contents/Home/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/Users/--/.nvm/versions/node/v8.16.2/bin:/Library/Java/JavaVirtualMachines/jdk1.8.0_231.jdk/Contents/Home/bin:.:/Users/--/Downloads/android-sdk-macosx/platform-tools:/Users/--/Downloads/android-sdk-macosx/tool:.:/Users/--/Downloads/android-sdk-macosx/platform-tools:/Users/--/Downloads/android-sdk-macosx/tool
 
 Yarn version: 
   1.19.1

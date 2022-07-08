@@ -9,14 +9,14 @@ var fs = require('fs');
 var readline = require('readline');
 var path = require('path');
 const HTTP_REG = /(((http[s]?|ftp):)?(:)?\/\/[A-Za-z0-9\-]+[.]{1}([A-Za-z0-9\-]+[.]?)+)/
-var filePath1 = path.resolve('/Users/baiwang/work/mainsite');
-var filePath2 = path.resolve('/Users/baiwang/work/HuanghePages');
-var filePath3 = path.resolve('/Users/baiwang/work/jingGangShan-thin');
+var filePath1 = path.resolve('/Users/--/work/mainsite');
+var filePath2 = path.resolve('/Users/--/work/HuanghePages');
+var filePath3 = path.resolve('/Users/--/work/jingGangShan-thin');
 const obj = {}
 const arr = []
 var fWriteName = './data.js';
 
-function fileDisplay(filePath) {
+function fileDisplay (filePath) {
     //根据文件路径读取文件，返回文件列表
     fs.readdir(filePath, function (err, files) {
         if (err) {
@@ -80,8 +80,8 @@ const resultArr = []
 const resultURl = './result.js'
 const filterREG = /(cdn|stackoverflow|org|tree|google|github|mozilla|jquery|ui|web|youtube|baidu|developer|layer|microsoft|window|this|oSpa|console|js)+/i
 const filterREG1 = /^\/\/[A-Za-z0-9\-]+[.]{1}([A-Za-z0-9\-]+)?$/
-function result() {
-    var fRead = fs.createReadStream('/Users/baiwang/code-study/test/readFIle/data.js');
+function result () {
+    var fRead = fs.createReadStream('/Users/--/code-study/test/readFIle/data.js');
     var objReadline = readline.createInterface({      // 按行读取
         input: fRead
     });
@@ -90,7 +90,7 @@ function result() {
             var s = line.match(HTTP_REG)
             if (!resultObj[s[0]]) {
                 resultObj[s[0]] = true
-                if(!filterREG.test(s[0]) && !filterREG1.test(s[0])) resultArr.push(s[0])
+                if (!filterREG.test(s[0]) && !filterREG1.test(s[0])) resultArr.push(s[0])
             }
         }
     });

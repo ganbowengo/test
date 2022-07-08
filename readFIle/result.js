@@ -1,10 +1,10 @@
-https://fp.baiwang.com
-https://www.baiwang.com
+https://fp.--.com
+https://www.--.com
 http://kfpt.test.51baiwang.com
-http://view.baiwang.com
-http://moirai-gateway.dev.baiwang-inner.com
-https://open.baiwang.com
+http://view.--.com
+http://moirai-gateway.dev.---inner.com
+https://open.--.com
 http://jira.51baiwang.com
 https://www.fapiaoer.cn
 https://shanghu.fapiaoer.cn
-//www.baiwang.com
+//www.--.com
